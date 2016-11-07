@@ -1,0 +1,147 @@
+/*******************************
+        Global Overrides
+*******************************/
+body{
+	//margin:70px 0px 0px 0px;
+}
+
+body .container.main{
+	margin:100px 0px;
+}
+
+.ui.segment{
+	small{
+		color:@grey;
+	}
+}
+
+@primaryColor   : @pink;
+@secondaryColor : @grey;
+@red            : #B03060;
+@orange         : #FE9A76;
+@yellow         : #FFD700;
+@olive          : #32CD32;
+@green          : #016936;
+@teal           : #008080;
+@blue           : #0E6EB8;
+@violet         : #EE82EE;
+@purple         : #B413EC;
+@pink           : #FF1493;
+@brown          : #A52A2A;
+@grey           : #A0A0A0;
+@black          : #000000;
+
+/*******************************
+        PRICING TABLE
+*******************************/
+/*
+ * Developer: Alireza Eskandarpour Shoferi
+ * Designer: Wouter de Bres (dribbble.com/wdeb)
+ *
+ * Distributed under the terms of the MIT license
+ * http://opensource.org/licenses/MIT
+ */
+
+@greenColor: @pink;
+.wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -190px 0 0 -468px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    color: #9f9f9f;
+    font-size: 15px;
+}
+.package {
+    box-sizing: border-box;
+    width: 301px;
+    height: 380px;
+    border: 3px solid #e8e8e8;
+    border-radius: 7px;
+    display: inline-block;
+    padding: 24px;
+    text-align: center;
+    float: left;
+    transition: margin-top .5s linear;
+    position: relative;
+    margin-right: 11px;
+}
+.package:hover {
+    margin-top: -30px;
+    transition: margin-top .3s linear;
+}
+.name {
+    color: #565656;
+    font-weight: 300;
+    font-size: 3rem;
+    margin-top: -5px;
+}
+.price {
+    margin-top: 7px;
+    font-weight: bold;
+}
+.price::after {
+    content: " / month per user";
+    font-weight: normal;
+}
+hr {
+    background-color: #dedede;
+    border: none;
+    height: 1px;
+}
+.trial {
+    font-size: .9rem;
+    font-weight: 600;
+    padding: 2px 21px 2px 21px;
+    color: @greenColor;
+    border: 1px solid #e4e4e4;
+    display: inline-block;
+    border-radius: 15px;
+    background-color: white;
+    position: relative;
+    bottom: -20px;
+}
+ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin-top: 29px;
+}
+li {
+    margin-bottom: 15px;
+}
+.checkIcon {
+    font-family: "FontAwesome";
+    content: "\f00c";
+}
+li::before {
+    .checkIcon;
+    font-size: 1.3rem;
+    color: @greenColor;
+    margin-right: 3px;
+}
+.brilliant {
+    border-color: @greenColor;
+}
+/* Triangle */
+.brilliant::before {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 64px 64px 0 0;
+    border-color: #3bc6b8 transparent transparent transparent;
+    position: absolute;
+    left: 0;
+    top: 0;
+    content: "";
+}
+.brilliant::after {
+    .checkIcon;
+    color: white;
+    position: absolute;
+    left: 9px;
+    top: 6px;
+    text-shadow: 0 0 2px #37c5b6;
+    font-size: 1.4rem;
+}

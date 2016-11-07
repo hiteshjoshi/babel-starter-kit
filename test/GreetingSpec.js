@@ -8,24 +8,24 @@
  */
 
 import { expect } from 'chai';
-import Greeting from '../src/Greeting';
+import Greeting from '../src/index';
 
 describe('Greeting', () => {
 
-  describe('greeting.hello()', () => {
+    describe('greeting.hello()', () => {
 
-    it('should return welcome message for a guest user', () => {
-      const greeting = new Greeting();
-      const message = greeting.hello();
-      expect(message).to.be.equal('Welcome, Guest!');
+        it('should return welcome message for a guest user', () => {
+            const greeting = new Greeting();
+            const message = greeting.hello();
+            expect(message).to.be.equal('Welcome, Guest!');
+        });
+
+        it('should return welcome message for a named user', () => {
+            const greeting = new Greeting('John');
+            const message = greeting.hello();
+            expect(message).to.be.equal('Welcome, John!');
+        });
+
     });
-
-    it('should return welcome message for a named user', () => {
-      const greeting = new Greeting('John');
-      const message = greeting.hello();
-      expect(message).to.be.equal('Welcome, John!');
-    });
-
-  });
 
 });

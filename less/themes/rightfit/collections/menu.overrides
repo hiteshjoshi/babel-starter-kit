@@ -1,0 +1,12 @@
+/*******************************
+         Theme Overrides
+*******************************/
+.ui.menu .item > i.icon {
+  opacity: @iconOpacity;
+  float: @iconFloat;
+  margin: @iconMargin;
+  
+}
+.ui.menu .item > i.icon:not(.dropdown){
+	font-size:2em;	
+}
