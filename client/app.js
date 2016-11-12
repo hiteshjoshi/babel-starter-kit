@@ -1,3 +1,7 @@
+import dropdown from 'dropdown';
+import popup from 'popup';
+import form from 'form';
+
 import transition from 'transition';
 import restful, { fetchBackend } from 'restful.js';
 
@@ -14,8 +18,8 @@ const api = restful(API, fetchBackend(fetch));
 
 const usersCollection = api.all('users'); // /users
 const session = api.all('session'); // /session
-const mobileSession = mobilesSession.custom('mobile'); // /session/mobile
-const emailsSession = mobilesSession.custom('email'); // /session/email
+const mobileSession = session.custom('mobile'); // /session/mobile
+const emailsSession = session.custom('email'); // /session/email
 
 
 //start the routings

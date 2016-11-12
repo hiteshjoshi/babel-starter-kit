@@ -57,11 +57,12 @@ let webp_options = {
     },
     module: {
         loaders: [{
-                test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
-                loader: 'babel', // 'babel-loader' is also a valid name to reference
+                test: /(\.jsx|\.js)$/, // Match both .js and .jsx
+                exclude: /node_modules/,
+                loader: 'babel-loader', // 'babel-loader' is also a valid name to reference
                 query: {
-                    presets: ['es2015']
+                    plugins: ['transform-runtime'],
+                    presets: ['es2015', 'stage-0']
                 }
             }
             // required to write "require('./style.css')"
@@ -74,8 +75,8 @@ let webp_options = {
             //{ test: /\.svg$/,    loader: "file-loader?prefix=font/" },
 
             // required for react jsx
-            //{ test: /\.js$/,    loader: "msx-loader" },
-            //{ test: /\.jsx$/,   loader: "msx-loader?insertPragma=React.DOM" },
+            //, { test: /\.jsx$/, loader: "msx-loader" },
+            //,{ test: /\.jsx$/,   loader: "msx-loader?insertPragma=React.DOM" },
         ]
     },
     resolve: {
@@ -99,6 +100,7 @@ let webp_options = {
             'lodash': __dirname + '/plugins/lodash.js',
             'jquery-slim': __dirname + '/node_modules/jquery/dist/jquery.js',
             'mithril': __dirname + '/plugins/mithril.js',
+            'mjsx_loader': __dirname + '/plugins/mjsx_loader.js',
             'js': __dirname + '/plugins/',
             'magnific': __dirname + '/plugins/jquery.magnific-popup.js',
             'css': __dirname + '/plugins/css',
