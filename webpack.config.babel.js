@@ -96,14 +96,10 @@ let webp_options = {
             'dimmer': __dirname + '/less/definitions/modules/dimmer.js',
             'dropdown': __dirname + '/less/definitions/modules/dropdown.js',
             'bullet': __dirname + '/plugins/bullet.js',
-            'mithril-global-request-headers': __dirname + '/plugins/mithril-global-request-headers',
             'lodash': __dirname + '/plugins/lodash.js',
             'jquery-slim': __dirname + '/node_modules/jquery/dist/jquery.js',
             'mithril': __dirname + '/plugins/mithril.js',
             'js': __dirname + '/plugins/',
-            'bxslider': __dirname + '/plugins/bxslider.js',
-
-            'jquery.rest': __dirname + '/plugins/jquery.rest.js',
             'magnific': __dirname + '/plugins/jquery.magnific-popup.js',
             'css': __dirname + '/plugins/css',
             'datepicker': __dirname + '/plugins/datepicker'
@@ -138,7 +134,7 @@ plugins.push((new webpack.BannerPlugin([
     pkg.name + " v" + pkg.version,
     pkg.description,
     pkg.homepage,
-    "Copyright (c) 2015-" + currentYear + " RightFit, Inc. All Rights Reserved.",
+    "Copyright (c) 2015-" + currentYear + " HATCH IT UP, Inc. All Rights Reserved.",
     "Are you a frontend Ninja? work with us! email at " + pkg.career
 ].join("\n"), {
     entryOnly: true

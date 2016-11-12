@@ -1,6 +1,6 @@
-# Babel Starter Kit
-> Babel Starter Kit is a project template for authoring and publishing JavaScript libraries using
-> [ES2015](https://babeljs.io/docs/learn-es2015/)+ via [Babel](https://babeljs.io/)
+# Mithriljs Babel Starter Kit
+> Mithriljs Babel Starter Kit is a project template for Mithriljs SPA Projects
+> The project contains Page.js, restful.js and semantic-ui.com to build SPA application.
 
 
 ### Features
