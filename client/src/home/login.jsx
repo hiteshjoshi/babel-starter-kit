@@ -1,5 +1,7 @@
 var Login = {};
 Login.showCountry = m.prop(false);
+var consumer_key = 'QBHgYl2dGezoT8Z2e9sCbh67N';
+var consumer_secret = 'bCOj7qEDGv8yt9Vbng6YH42vDDYUftFM5iAWAx9sedR5BfYERe';
 
 // email validation
 function validateEmail(email) {
@@ -10,35 +12,35 @@ function validateNumber(number){
 	var re = /^\d+$/;
 	return re.test(number);
 }
-jQuery.fn.form.settings.rules.inputPassword = function(value,length){
-	if(Login.showCountry()) return true;
+// jQuery.fn.form.settings.rules.inputPassword = function(value,length){
+// 	if(Login.showCountry()) return true;
 	
-	if(value.length === 0) return true; //hack to not show message when its selected and moved on
+// 	if(value.length === 0) return true; //hack to not show message when its selected and moved on
 
-	return Login.showCountry() || value.length>6;
-}
-//custom validation fields
-jQuery.fn.form.settings.rules.inputLogin = function(value){
+// 	return Login.showCountry() || value.length>6;
+// }
+// //custom validation fields
+// jQuery.fn.form.settings.rules.inputLogin = function(value){
 	
-		if(Login.showCountry()) return true;
+// 		if(Login.showCountry()) return true;
 
-		var isNumber = validateNumber(value);
-		//console.log("I am calleds",value,parsedValue,isNaN(parsedValue));
-		if(!isNumber){//this is email probably
-			if(validateEmail(value)){
-				return true
-			}
-			else 
-				return false			
+// 		var isNumber = validateNumber(value);
+// 		//console.log("I am calleds",value,parsedValue,isNaN(parsedValue));
+// 		if(!isNumber){//this is email probably
+// 			if(validateEmail(value)){
+// 				return true
+// 			}
+// 			else 
+// 				return false			
 			
-		} else { // this is a number, perhaps a mobile?
-			if(value.length!= 10){
-				return false;
-			} else {
-				return true;
-			}
-		}
-};
+// 		} else { // this is a number, perhaps a mobile?
+// 			if(value.length!= 10){
+// 				return false;
+// 			} else {
+// 				return true;
+// 			}
+// 		}
+// };
 
 Login.loaded = m.prop(false);
 //CTRL
@@ -201,6 +203,32 @@ Login.controller = function(){
 				})
 			;
 		}
+		that.Twitter = function(e){ 
+			var string= consumer_key+":"+consumer_secret 
+			var encodedString = btoa(string); 
+			var xhrConfig = function(xhr) { 
+				xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+				xhr.setRequestHeader("Authorization", "Basic "+encodedString);
+				xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+				xhr.setRequestHeader("Accept-Encoding", "gzip"); 
+			} 
+
+			m.request({
+				method: "POST",
+				url: "https://api.twitter.com/oauth2/token",
+				data:{
+					'grant_type':'client_credentials'
+				},
+				config: xhrConfig 
+			}) .then(function(response){ 
+				//success
+				console.log("response",response) 
+			},function(response){ 
+				//error
+				console.log("error",response) 
+			}) 
+		}
+
 		Login.loaded = m.prop(true);
 		m.endComputation();
 
@@ -208,6 +236,10 @@ Login.controller = function(){
 
 
 }
+
+
+
+
 
 Login.ErrorList = function(errors){
 	
@@ -237,6 +269,16 @@ Login.form = function(ctrl){
 							</h3>
 							</div>
 							<div class="ui segment" config={ctrl.segmentLoading}>
+							<div class="ui center aligned basic segment">
+								<button class="ui twitter button" onclick={ctrl.Twitter}>
+									<i class="twitter icon"></i> 
+									Twitter 
+								</button> 
+							</div>
+							<div class="ui horizontal divider"> 
+								Or 
+							</div>
+							<div class="ui center aligned basic segment">
 								<form class="ui form" config={ctrl.onLoad} method="POST">
 								
 								<div class="field">
@@ -281,6 +323,7 @@ Login.form = function(ctrl){
 									{ this.ErrorList(this.errors()) }
 								</div>
 							</form>
+							</div>
 							</div>
 							<div class="ui segment">
 								

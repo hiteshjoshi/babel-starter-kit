@@ -2,7 +2,10 @@
 // A function that can merge routes.
 // we want if router has parent, then mount parent first, if parent has parent, moutn that first.
 
-import { primary, temp } from "modules/template"
+import {
+    primary,
+    temp
+} from "modules/template"
 
 class Router {
 
@@ -17,18 +20,18 @@ class Router {
 
 export default Router;
 
-var nr = new Router({
-    state: "home",
-    url: "/",
-    template: new temp(),
-    primary: new primary(),
-})
+// var nr = new Router({
+//     state: "home",
+//     url: "/",
+//     template: new temp(),
+//     primary: new primary(),
+// })
 
-nr.add({
-    url
-})
+// nr.add({
+//     url
+// })
 
-console.log(nr)
+// console.log(nr)
 
 var Merge = function(obj1, obj2) {
 
@@ -68,7 +71,6 @@ var routing = function(data, options) {
     this._options = options;
     this.States = {};
     this._id = data.id || 0;
-
 
 
 
