@@ -18,7 +18,7 @@ let plugins = [
     new webpack.DefinePlugin({
         'ENVIRONMENT': JSON.stringify((process.env.NODE_ENV || 'development')),
         'VERSION': JSON.stringify(require('./package.json').version),
-        'API': JSON.stringify(process.env.NODE_ENV == 'production' ? "https://rightfit.io/api" : (process.env.NODE_ENV == 'staging' ? "https://staging.rightfit.io/api" : "http://rightfit.lol/api"))
+        'API': JSON.stringify(process.env.NODE_ENV == 'production' ? "https://rightfit.io/api" : (process.env.NODE_ENV == 'staging' ? "https://staging.rightfit.io/api" : "http://localhost:8080/api/v1"))
     }), new webpack.optimize.CommonsChunkPlugin( /* chunkName= */ "vendor", /* filename= */ "vendor.js"), new webpack.optimize.DedupePlugin(), new webpack.ProvidePlugin({
         // Automtically detect jQuery and $ as free var in modules
         // and inject the jquery library

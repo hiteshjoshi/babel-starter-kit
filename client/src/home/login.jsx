@@ -1,7 +1,5 @@
 var Login = {};
 Login.showCountry = m.prop(false);
-var consumer_key = 'QBHgYl2dGezoT8Z2e9sCbh67N';
-var consumer_secret = 'bCOj7qEDGv8yt9Vbng6YH42vDDYUftFM5iAWAx9sedR5BfYERe';
 
 // email validation
 function validateEmail(email) {
@@ -203,31 +201,6 @@ Login.controller = function(){
 				})
 			;
 		}
-		that.Twitter = function(e){ 
-			var string= consumer_key+":"+consumer_secret 
-			var encodedString = btoa(string); 
-			var xhrConfig = function(xhr) { 
-				xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-				xhr.setRequestHeader("Authorization", "Basic "+encodedString);
-				xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-				xhr.setRequestHeader("Accept-Encoding", "gzip"); 
-			} 
-
-			m.request({
-				method: "POST",
-				url: "https://api.twitter.com/oauth2/token",
-				data:{
-					'grant_type':'client_credentials'
-				},
-				config: xhrConfig 
-			}) .then(function(response){ 
-				//success
-				console.log("response",response) 
-			},function(response){ 
-				//error
-				console.log("error",response) 
-			}) 
-		}
 
 		Login.loaded = m.prop(true);
 		m.endComputation();
@@ -270,10 +243,13 @@ Login.form = function(ctrl){
 							</div>
 							<div class="ui segment" config={ctrl.segmentLoading}>
 							<div class="ui center aligned basic segment">
-								<button class="ui twitter button" onclick={ctrl.Twitter}>
-									<i class="twitter icon"></i> 
-									Twitter 
-								</button> 
+								<form action="http://localhost:8080/api/v1/users/session">
+									<input type="hidden" name="provider" value="twitter" />
+									<button class="ui twitter button" onclick='http://45.55.233.252:8080/users/session?provider=twitter'>
+										<i class="twitter icon"></i> 
+										Sign In with Twitter 
+									</button> 
+								</form>
 							</div>
 							<div class="ui horizontal divider"> 
 								Or 
