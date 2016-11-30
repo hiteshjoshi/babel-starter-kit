@@ -161,6 +161,7 @@ var routing = function(data, options) {
 
     return this;
 }
+
 var r = new routing({
     ctrl: require('modules/home'),
     state: "home",
@@ -168,7 +169,8 @@ var r = new routing({
 }, {
     mainElement: document.body,
     secondElement: null
-});
+})
+
 
 r.add({
         ctrl: require('modules/home/signup'),
@@ -180,8 +182,15 @@ r.add({
         parentState: "home", //this will be bound to parent url
         url: "/login",
         state: "login" //name of state + url after slash /
+    }).add({
+        ctrl: require('modules/dashboard'),
+        parentState: "dashboard", //this will be bound to parent url
+        url: "/dashboard",
+        state: "dashboard" //name of state + url after slash /
     })
     .exec();
+
+
 
 //console.log(r.States);
 //custom animations

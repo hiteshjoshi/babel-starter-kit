@@ -1,6 +1,6 @@
 var Login = {};
 Login.showCountry = m.prop(false);
-
+var Auth = require('modules/auth');
 // email validation
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -165,6 +165,10 @@ Login.controller = function(){
 			
 			//loading
 			that.elements.formSegment.addClass("loading");
+		}
+
+		that.Twitter = function(e){
+			m.request({method: "GET", url: "/user"}).then(users).then(doSomething)
 		}
 		
 		//when form loads, this will validate fields

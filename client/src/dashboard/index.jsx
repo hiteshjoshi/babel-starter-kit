@@ -3,16 +3,24 @@ Dashboard.second = function(element){
     m.secondDiv = element;
     return element;
 }
+var Auth = require('modules/auth');
+
 //CTRL
 Dashboard.controller = function(){
 
+	var that = this;
+	if(document.URL.split(",")[0].split("=")[0].split("?")[1]=="token"){
+		var token = document.URL.split(",")[0].split("=")[1]
+		Auth.setSession(token)
+	}
 
-
-
-	if(Auth.session_exists() === false)
+	if(Auth.IsLoggedIn())
 	{
 		page.redirect('/login')
 	}
+	// if(m.secondElem()===null){
+	// 	m.secondElem = m.prop(require('modules/dashboard/analytics'))
+	// }
 }
 
 Dashboard.view = function(ctrl){
@@ -39,7 +47,7 @@ Dashboard.view = function(ctrl){
 					  </div>
 					  
 					  <div class="twelve wide column">
-					  	{m.secondElem()}
+					  	{require('modules/dashboard/analytics')}
 					  </div>
 					</div>
 

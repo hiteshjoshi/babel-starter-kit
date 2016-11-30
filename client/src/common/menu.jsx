@@ -42,11 +42,6 @@ Menu.controller = function(){
 	ctrl.memberMenu = [
 		{
 			type:"item",
-			title:"Signup",
-			href:"/signup"
-		},
-		{
-			type:"item",
 			title:"Dashboard",
 			href:"/dashboard"
 		},

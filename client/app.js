@@ -1,6 +1,8 @@
 import dropdown from 'dropdown';
 import popup from 'popup';
 import form from 'form';
+import modal from 'modal';
+import dimmer from 'dimmer';
 
 import transition from 'transition';
 import restful, {
@@ -16,27 +18,12 @@ m.cookie = require('js-cookie');
 m.seriesColors = ['blue', 'orange', 'teal', 'green', 'red', 'violet', 'purple', 'pink', 'brown', 'grey'];
 m.colors = ['red', 'blue', 'orange', 'teal', 'olive', 'pink', 'green', 'violet', 'yellow', 'purple', 'brown', 'grey'];
 
-const api = restful(API, fetchBackend(fetch));
+m.api = restful(API, fetchBackend(fetch));
+// m.api = m.prop(api)
 
-const usersCollection = api.all('users'); // /users
-const session = api.all('session'); // /session
-const mobileSession = session.custom('mobile'); // /session/mobile
-const emailsSession = session.custom('email'); // /session/email
-m.urls = function(theClass, theObject, action) {
-	var url = '';
-
-	if (action) {
-		url = "http://localhost:8080/api/v1" + '/' + theClass + '/' + theObject + '/' + action
-	} else {
-		if (theObject) {
-			url = "http://localhost:8080/api/v1" + '/' + theClass + '/' + theObject
-		} else {
-			url = "http://localhost:8080/api/v1" + '/' + theClass
-		}
-	}
-
-	return url;
-}
+m.usersCollection = m.api.all('users'); // /users
+m.schedule = m.api.all('schedule'); // /schedule
+m.ping = m.api.custom('ping');; // /ping
 
 //start the routings
 m.route = require('./routes');

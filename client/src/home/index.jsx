@@ -8,7 +8,7 @@ HomePage.routeParams = null;
 HomePage.child = null;
 //CTRL
 HomePage.controller = function(){
-	console.log("Home called",HomePage.routeParams)
+	// console.log("Home called",HomePage.routeParams)
 }
 
 HomePage.view = function(ctrl){

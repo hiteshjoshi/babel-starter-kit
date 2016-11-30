@@ -13,11 +13,9 @@ Logout.controller = function(){
 	}
 	if(Auth.session_exists())
 	{
-		m.api.logout.post('')
-		.then(function(){
+		m.users.delete('session').then((response) => {
 			clearSession()
-		})
-		.error(function(){
+		}, (response) =>{
 			clearSession()
 		})
 	} else {

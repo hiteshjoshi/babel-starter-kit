@@ -18,7 +18,7 @@ let plugins = [
     new webpack.DefinePlugin({
         'ENVIRONMENT': JSON.stringify((process.env.NODE_ENV || 'development')),
         'VERSION': JSON.stringify(require('./package.json').version),
-        'API': JSON.stringify(process.env.NODE_ENV == 'production' ? "https://rightfit.io/api" : (process.env.NODE_ENV == 'staging' ? "https://staging.rightfit.io/api" : "http://localhost:8080/api/v1"))
+        'API': JSON.stringify(process.env.NODE_ENV == 'production' ? "https://rightfit.io/api" : (process.env.NODE_ENV == 'staging' ? "https://staging.rightfit.io/api" : "http://45.55.233.252:8080/api/v1"))
     }), new webpack.optimize.CommonsChunkPlugin( /* chunkName= */ "vendor", /* filename= */ "vendor.js"), new webpack.optimize.DedupePlugin(), new webpack.ProvidePlugin({
         // Automtically detect jQuery and $ as free var in modules
         // and inject the jquery library
@@ -93,7 +93,6 @@ let webp_options = {
             'modal': __dirname + '/less/definitions/modules/modal.js',
             'checkbox': __dirname + '/less/definitions/modules/checkbox.js',
             'popup': __dirname + '/less/definitions/modules/popup.js',
-            'modal': __dirname + '/less/definitions/modules/modal.js',
             'dimmer': __dirname + '/less/definitions/modules/dimmer.js',
             'dropdown': __dirname + '/less/definitions/modules/dropdown.js',
             'bullet': __dirname + '/plugins/bullet.js',

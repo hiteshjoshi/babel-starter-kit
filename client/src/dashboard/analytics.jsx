@@ -1,12 +1,14 @@
 
 var Analytics = {};
-
+var moment = require('moment')
 
 Analytics.events = {
 	1:1,
 	3:1,
 	20:1
 };
+
+
 
 Analytics.calender = function(next){
 
@@ -97,7 +99,7 @@ Analytics.calender = function(next){
 	    if(weeks.length<6){
 	    	weeks.push([{empty:true},{empty:true},{empty:true},{empty:true},{empty:true},{empty:true},{empty:true}]);
 	    }
-	    console.log(weeks.length,count,weeks,first,last)
+	    // console.log(weeks.length,count,weeks,first,last)
 	    return weeks;
 	}
 
@@ -141,53 +143,12 @@ Analytics.calenderView = function(ctrl){
 						    					elment = (<td>&nbsp;</td>)
 						    				} else{
 						    					elment = (<td>
-						    						<div class="ui null circular large label">
+						    						<div class="ui null circular large label" style="cursor:pointer;" id={day.date} onclick={function(e){ctrl.getAgendas(e.currentTarget.id,that.now)}}>
 			    									{day.date}
 			    									</div>
 						    					</td>)
 						    				}
-						    				
-						    					if(that.events[day.date]){
-							    					return (<td>
-							    								<div class="ui blue circular large label" config={ctrl.hover} style="cursor:pointer;">
-							    									{day.date}
-							    								</div>
-								    							
-								    							<div class="ui fluid popup transition hidden">
-																  <div class="ui grid">
-																    <div class="column">
-																		  
-																		    <div class="ui feed">
-																		      <div class="event">
-																		        <div class="content">
-																		          <div class="summary">
-																		             <a>Visit lake for some festival</a>
-																		          </div>
-																		          <div class="date">
-																			          20th Oct at 6:00pm
-																			        </div>
-																		        </div>
-																		      </div>
-																		      <div class="event">
-																		        <div class="content">
-																		          <div class="summary">
-																		             <a>Call investors for funding</a> 
-																		             
-																		          </div>
-																		          <div class="date">
-																			          20th Oct at 4:50pm
-																			        </div>
-																		        </div>
-																		      </div>
-																		    </div>
-																		
-																    </div>																    
-																  </div>
-																</div>
-							    						</td>)
-							    				} else {
-							    					return elment;
-							    				}
+						    				return elment
 						    			})
 						    		}
 						    	</tr>
@@ -211,14 +172,16 @@ Analytics.calenderView = function(ctrl){
 	    	</table>)
 }
 
-Analytics.loaded = m.prop(false);
+Analytics.loaded = m.prop(true);
+
+Analytics.showSchedule = m.prop(false);
 
 //CTRL
 Analytics.controller = function(){
 	var that = this;
 
 	require.ensure(["popup", "moment"], function(require) {
-        
+        that.va=1;
         require("popup");
 
         moment = require("moment");
@@ -246,7 +209,257 @@ Analytics.controller = function(){
 			Analytics.calender(-1);
 		}.bind(that);
 
+		that.dateToday = m.prop("");
+		that.startTime = m.prop(0);
+		that.endTime = m.prop(0);
+		that.todayDate = m.prop(0);
+		that.description = m.prop("");
+		that.schedules = m.prop([]);
 
+		that.getAgendas = function(id,today){
+		    var j = id % 10;
+		    var k = id % 100;
+		    if (j == 1 && k != 11) {
+		        that.dateToday = m.prop(id+ "st "+today)
+		        that.todayDate = m.prop(id+" "+today)
+		    } else if (j == 2 && k != 12) {
+		        that.dateToday = m.prop(id+ "nd "+today)
+		        that.todayDate = m.prop(id+" "+today)
+		    } else if (j == 3 && k != 13) {
+		       that.dateToday = m.prop(id+ "rd "+today)
+		       that.todayDate = m.prop(id+" "+today)
+		    } else{
+		    	that.dateToday = m.prop(id+ "th "+today)
+		    	that.todayDate = m.prop(id+" "+today)
+		    }
+		    var todayDate = that.todayDate().split(" ")
+			switch(todayDate[1]) {
+			    case "January":
+			        todayDate = (Number(todayDate[0])*1000000) +(1*10000)+ Number(todayDate[2])
+			        break;
+				case "February":
+			        todayDate = (Number(todayDate[0])*1000000) +(2*10000)+ Number(todayDate[2])
+			        break;
+			    case "March":
+			        todayDate = (Number(todayDate[0])*1000000) +(3*10000)+ Number(todayDate[2])
+			        break;
+			    case "April":
+			        todayDate = (Number(todayDate[0])*1000000) +(4*10000)+ Number(todayDate[2])
+			        break;
+			    case "May":
+			        todayDate = (Number(todayDate[0])*1000000) +(5*10000)+ Number(todayDate[2])
+			        break;
+			    case "June":
+			        todayDate = (Number(todayDate[0])*1000000) +(6*10000)+ Number(todayDate[2])
+			        break;
+			    case "July":
+			       todayDate = (Number(todayDate[0])*1000000) +(7*10000)+ Number(todayDate[2])
+			        break;
+			    case "August":
+			        todayDate = (Number(todayDate[0])*1000000) +(8*10000)+ Number(todayDate[2])
+			        break;
+			    case "September":
+			        todayDate = (Number(todayDate[0])*1000000) +(9*10000)+ Number(todayDate[2])
+			        break;
+			    case "October":
+			        todayDate = (Number(todayDate[0])*1000000) +(10*10000)+ Number(todayDate[2])
+			        break;
+			    case "November":
+			        todayDate = (Number(todayDate[0])*1000000) +(11*10000)+ Number(todayDate[2])
+			        break;
+			    default:
+			        todayDate = (Number(todayDate[0])*1000000) +(12*10000)+ Number(todayDate[2])
+			}
+		    m.api.one("schedule",todayDate).get().then(function(response){
+		    	that.schedules = m.prop(response.body(false).data)
+		    	Analytics.showSchedule = m.prop(true)
+		    	m.redraw(true)
+		    },function(error){
+		    	console.log("error",error)
+		    })
+			m.redraw(true);
+		}
+
+
+		that.verifyAgenda = function(event){
+			if(that.va==1){
+				$.fn.form.settings.rules.checkMinutes = function(value) {
+				  if((value%100)<=59){
+				  	return true;
+				  }
+				  else
+				  	return false;
+				};
+				$.fn.form.settings.rules.checkHours = function(value) {
+				  if((value/100)<=23){
+				  	return true;
+				  }
+				  else
+				  	return false;
+				};
+				// $.fn.form.settings.rules.checkOfficeHours = function(value) {
+				//   	if((value/100<9)||(value/100>19))
+				//   		return false
+				//   	else
+				//   		return true;
+				// };
+				$('#agendaForm').form({
+					fields:{
+						startTime:{
+							identifier:'startTime',
+							rules: [
+								{
+			                        type: 'empty',
+			                        prompt: 'Please enter start time to continue'
+			                    },
+								{
+			                        type: 'integer',
+			                        prompt: 'startTime should be integer'
+			                    },
+			                    {
+			                        type: 'checkMinutes',
+			                    	prompt: 'minutes hould be less than or equals to 59'
+			                    },
+			                    {
+			                        type: 'checkHours',
+			                    	prompt: 'hours should be less than or equals to 23'
+			                    }//,
+			                    // {
+			                    //     type: 'checkOfficeHours',
+			                    // 	prompt: 'Please select office hours only'
+			                    // }
+			                ]
+						},
+						endTime:{
+							identifier:'endTime',
+							rules: [
+								{
+			                        type: 'empty',
+			                        prompt: 'Please enter end time to continue'
+			                    },
+								{
+			                        type: 'integer',
+			                        prompt: 'endTime should be integer'
+			                    },
+			                    {
+			                        type: 'checkMinutes',
+			                    	prompt: 'minutes hould be less than or equals to 59 and hours should be less than or equals to 23'
+			                    },
+			                    {
+			                        type: 'checkHours',
+			                    	prompt: 'hours should be less than or equals to 23'
+			                    }//,
+			                    // {
+			                    //     type: 'checkOfficeHours',
+			                    // 	prompt: 'Please select office hours only'
+			                    // }
+		                    ]
+						},
+						description:{
+							identifier:'description',
+							rules: [
+								{
+			                        type: 'empty',
+			                        prompt: 'Please enter description to continue'
+			                    }
+		                    ]
+						}
+					},
+					onSuccess: function(e,f) {
+						console.log("onSuccess")
+						that.va=0;
+		            	that.addAgenda();
+		            	event.preventDefault();
+		            	return;
+		            },
+		            onFailure: function(err,f){
+		            	return false;
+		            }
+				});
+			}
+		}
+
+		//add user agenda
+		that.addAgenda = function(e){
+			var todayDate = that.todayDate().split(" ")
+			switch(todayDate[1]) {
+			    case "January":
+			    	console.log("jan")
+			        todayDate = (Number(todayDate[0])*1000000) +(1*10000)+ Number(todayDate[2])
+			        break;
+				case "February":
+					console.log("feb")
+			        todayDate = (Number(todayDate[0])*1000000) +(2*10000)+ Number(todayDate[2])
+			        break;
+			    case "March":
+			    	console.log("mar")
+			        todayDate = (Number(todayDate[0])*1000000) +(3*10000)+ Number(todayDate[2])
+			        break;
+			    case "April":
+			    	console.log("apr")
+			        todayDate = (Number(todayDate[0])*1000000) +(4*10000)+ Number(todayDate[2])
+			        break;
+			    case "May":
+			    	console.log("may")
+			        todayDate = (Number(todayDate[0])*1000000) +(5*10000)+ Number(todayDate[2])
+			        break;
+			    case "June":
+			    	console.log("june")
+			        todayDate = (Number(todayDate[0])*1000000) +(6*10000)+ Number(todayDate[2])
+			        break;
+			    case "July":
+			    	console.log("July")
+			        todayDate = (Number(todayDate[0])*1000000) +(7*10000)+ Number(todayDate[2])
+			        break;
+			    case "August":
+			    	console.log("aug")
+			        todayDate = (Number(todayDate[0])*1000000) +(8*10000)+ Number(todayDate[2])
+			        break;
+			    case "September":
+			    	console.log("sept")
+			        todayDate = (Number(todayDate[0])*1000000) +(9*10000)+ Number(todayDate[2])
+			        break;
+			    case "October":
+			    	console.log("oct")
+			        todayDate = (Number(todayDate[0])*1000000) +(10*10000)+ Number(todayDate[2])
+			        break;
+			    case "November":
+			    	console.log("nov")
+			        todayDate = (Number(todayDate[0])*1000000) +(11*10000)+ Number(todayDate[2])
+			        break;
+			    default:
+			    	console.log("dec")
+			        todayDate = (Number(todayDate[0])*1000000) +(12*10000)+ Number(todayDate[2])
+			}
+			console.log(that.startTime(),that.endTime(),that.description(),todayDate)
+			m.schedule.post({
+                startTime: Number(that.startTime()),
+                endTime: Number(that.endTime()),
+                date: todayDate,
+                task: that.description(),
+            }).then(function(response){
+		        console.log("reponse",response.body(false).data)
+		        // m.redraw(true);
+		    }, function(response){
+		        // The reponse code is not >= 200 and < 400
+		        console.log("error",response)
+		    });
+			that.startTime = m.prop("")
+			that.endTime = m.prop("")
+			that.description = m.prop("")
+		}
+
+		that.popForm = function(){
+			$('.ui.modal').modal('show');
+		}
+
+		that.addBackground = function(e,isInit){
+			if (!isInit){
+				e.style.background = m.seriesColors[Math.floor(Math.random() * (m.seriesColors.length-1)) + 0 ];
+			}
+		}
+
+		
         Analytics.loaded = m.prop(true);
         m.redraw();
 
@@ -256,163 +469,86 @@ Analytics.controller = function(){
 
 }
 
+
+Analytics.scheduleForm = function(ctrl){
+	return(
+		<div class="ui modal">
+		  <i class="close icon"></i>
+		  <div class="header">
+		    Add Agenda
+		  </div>
+		  <div class="image content">
+		    <div class="description">
+		    	<form class="ui form" id="agendaForm" config={ctrl.verifyAgenda}>
+		    	  <div class="two fields">
+    				<div class="field">
+      					<label>Start Time</label>
+					    <input type="text" name="startTime" placeholder="HHMM" oninput={m.withAttr("value",ctrl.startTime)} value={ctrl.startTime()}/>
+				    </div>
+    				<div class="field">
+      					<label>End Time</label>
+					    <input type="text" name="endTime" placeholder="HHMM" oninput={m.withAttr("value",ctrl.endTime)} value={ctrl.endTime()}/>
+				    </div>
+				  </div>
+				  <div class="field">
+				  	<label>Description</label>
+				  	<input type="text" name="description" placeholder="Your description" onchange={function(e){ctrl.description = m.prop(e.target["value"]) }} value={ctrl.description()}/>
+				  </div>
+				  <button class="ui button" type="submit">Submit</button>
+				  <div class="ui error message" id="errmsg"></div>
+		    	</form>
+		    </div>
+		  </div>
+		</div>
+	)
+}
+
+
+
+Analytics.scheduleDetails = function(ctrl){
+	var that = this;
+
+	return(
+		<div class="eight wide column">
+			<div class = "ui segments" style="border-radius:30px 30px 30px 30px;">
+				<div class="ui center aligned yellow inverted verticle segment" style="border-radius:30px 30px 0px 0px;color:black !important;">
+					Agenda for {ctrl.dateToday()}
+				</div>
+				<div class = "ui verticle segment" style="padding:0%"> 
+					<table class="ui celled table" style="width:100.35%;">
+					{
+						ctrl.schedules().map(function(schedule,i){
+							return(
+								<tr config={ctrl.addBackground}>
+									<td height="100" align="center" style="width:15%;">{schedule.StartTime}<br/><br/><br/>{schedule.EndTime}</td>
+									<td height="100" style="width:85%;">{schedule.Task}</td>
+								</tr>
+							)
+						})
+					}
+					</table>
+				</div>
+				<div class="ui right aligned yellow inverted verticle segment" style="border-radius:0px 0px 30px 30px;margin:0%;">
+					<button class="ui primary button" style="border-radius:50px 50px 50px 50px;color:black !important;" onclick={ctrl.popForm}>
+						+ Add Task
+						{this.scheduleForm(ctrl)}
+					</button>
+				</div>
+			</div>
+		</div>
+	)
+}
+
 Analytics.view = function(ctrl){
 	
 		return(
 			<div class="ui grid">
-
-				<div class="eight wide column">
-					<div class="ui feed">
-
-						<div class="ui fluid card">
-						  <div class="content">
-						    <div class="header">Android developer</div>
-						  </div>
-						  <div class="content">
-						    <h4 class="ui sub header dash_header">2-4 years of experience required.</h4>
-						    <div class="ui small feed">
-						      <div class="event">
-						        <div class="content">
-						          <div class="summary">
-						             <div class="ui tiny label">Java</div>
-						             <div class="ui tiny label">XML</div>
-						             <div class="ui tiny label">JSON</div>
-						             <div class="ui tiny label">Google Auth</div>
-						          </div>
-						        </div>
-						      </div>
-						      <div class="event">
-						        <div class="content">
-						          <div class="summary">
-						             Good pay. Amazing people. Cool company. Blah blah and more blah. Some more blah blah blah.
-						          </div>
-						          <div class="ui divider"></div>
-						        </div>
-						      </div>
-						      <div class="event">
-
-						        <div class="content">
-						          <div class="summary">
-						             <a>Some awesomeness</a> regarding dates and facts <br/>
-						             12th-23th Dec 
-						          </div>
-						        </div>
-						      </div>
-						    </div>
-						  </div>
-						  <div class="extra content">
-						  	<div class="ui two buttons">
-						  		<div class="ui primary button">Get connected</div>
-						  		<div class="ui button">Never show</div>
-						  	</div>
-						  </div>
-						</div>
-
-						
-						<div class="ui fluid card">
-						  <div class="content">
-						    <div class="header">Javascript UI developer</div>
-						  </div>
-						  <div class="content">
-						    <h4 class="ui sub header dash_header">1-4 years of experience required.</h4>
-						    <div class="ui small feed">
-						      <div class="event">
-						        <div class="content">
-						          <div class="summary">
-						             <div class="ui tiny label">Javascript</div>
-						             <div class="ui tiny label">Design sense</div>
-						             <div class="ui tiny label">UI/UX</div>
-						             <div class="ui tiny label">CSS3</div>
-						          </div>
-						        </div>
-						      </div>
-						      <div class="event">
-						        <div class="content">
-						          <div class="summary">
-						             We are excited to launch our new company and product Ooooh. After being featured in too many magazines to mention and having created an online stir, we know that Ooooh is going to be big. You may have seen us in the Dinosaurs’ Den where we were we told that we didn’t need them because we were already doing it so well ourselves, so that’s what we have continued to do. We also hope to win Startup Fictional Business of the Year this Year.
-						          </div>
-						          <div class="ui divider"></div>
-						        </div>
-						      </div>
-						      <div class="event">
-
-						        <div class="content">
-						          <div class="summary">
-						             <a>Some awesomeness</a> regarding dates and facts <br/>
-						             12th-23th Dec 
-						          </div>
-						        </div>
-						      </div>
-						    </div>
-						  </div>
-						  <div class="extra content">
-						  	<div class="ui two buttons">
-						  		<div class="ui primary button">Get connected</div>
-						  		<div class="ui button">Never show</div>
-						  	</div>
-						  </div>
-						</div>
-
-						
-						<div class="ui fluid card">
-						  <div class="content">
-						    <div class="header">Android developer</div>
-						  </div>
-						  <div class="content">
-						    <h4 class="ui sub header dash_header">2-4 years of experience required.</h4>
-						    <div class="ui small feed">
-						      <div class="event">
-						        <div class="content">
-						          <div class="summary">
-						             <div class="ui tiny label">Java</div>
-						             <div class="ui tiny label">XML</div>
-						             <div class="ui tiny label">JSON</div>
-						             <div class="ui tiny label">Google Auth</div>
-						          </div>
-						        </div>
-						      </div>
-						      <div class="event">
-						        <div class="content">
-						          <div class="summary">
-						             Good pay. Amazing people. Cool company. Blah blah and more blah. Some more blah blah blah.
-						          </div>
-						          <div class="ui divider"></div>
-						        </div>
-						      </div>
-						      <div class="event">
-
-						        <div class="content">
-						          <div class="summary">
-						             <a>Some awesomeness</a> regarding dates and facts <br/>
-						             12th-23th Dec 
-						          </div>
-						        </div>
-						      </div>
-						    </div>
-						  </div>
-						  <div class="extra content">
-						  	<div class="ui two buttons">
-						  		<div class="ui primary button">Get connected</div>
-						  		<div class="ui button">Never show</div>
-						  	</div>
-						  </div>
-						</div>
-
-						
-					  
-					 
-					  
-
-
-					</div>
-					<button class="fluid ui button">Load more jobs</button>
-				</div>
-
 				<div class="eight wide column">
 					<h2 class="ui header dash_header">Appointments</h2>
 					<div class="ui divider"></div>
 					{this.loaded()?this.calenderView(ctrl):''}
 				</div>
+				{this.showSchedule()?this.scheduleDetails(ctrl):''}
 				
 			</div>
 		)
