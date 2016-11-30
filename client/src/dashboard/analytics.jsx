@@ -221,56 +221,14 @@ Analytics.controller = function(){
 		    var k = id % 100;
 		    if (j == 1 && k != 11) {
 		        that.dateToday = m.prop(id+ "st "+today)
-		        that.todayDate = m.prop(id+" "+today)
 		    } else if (j == 2 && k != 12) {
 		        that.dateToday = m.prop(id+ "nd "+today)
-		        that.todayDate = m.prop(id+" "+today)
 		    } else if (j == 3 && k != 13) {
 		       that.dateToday = m.prop(id+ "rd "+today)
-		       that.todayDate = m.prop(id+" "+today)
 		    } else{
 		    	that.dateToday = m.prop(id+ "th "+today)
-		    	that.todayDate = m.prop(id+" "+today)
 		    }
-		    var todayDate = that.todayDate().split(" ")
-			switch(todayDate[1]) {
-			    case "January":
-			        todayDate = (Number(todayDate[0])*1000000) +(1*10000)+ Number(todayDate[2])
-			        break;
-				case "February":
-			        todayDate = (Number(todayDate[0])*1000000) +(2*10000)+ Number(todayDate[2])
-			        break;
-			    case "March":
-			        todayDate = (Number(todayDate[0])*1000000) +(3*10000)+ Number(todayDate[2])
-			        break;
-			    case "April":
-			        todayDate = (Number(todayDate[0])*1000000) +(4*10000)+ Number(todayDate[2])
-			        break;
-			    case "May":
-			        todayDate = (Number(todayDate[0])*1000000) +(5*10000)+ Number(todayDate[2])
-			        break;
-			    case "June":
-			        todayDate = (Number(todayDate[0])*1000000) +(6*10000)+ Number(todayDate[2])
-			        break;
-			    case "July":
-			       todayDate = (Number(todayDate[0])*1000000) +(7*10000)+ Number(todayDate[2])
-			        break;
-			    case "August":
-			        todayDate = (Number(todayDate[0])*1000000) +(8*10000)+ Number(todayDate[2])
-			        break;
-			    case "September":
-			        todayDate = (Number(todayDate[0])*1000000) +(9*10000)+ Number(todayDate[2])
-			        break;
-			    case "October":
-			        todayDate = (Number(todayDate[0])*1000000) +(10*10000)+ Number(todayDate[2])
-			        break;
-			    case "November":
-			        todayDate = (Number(todayDate[0])*1000000) +(11*10000)+ Number(todayDate[2])
-			        break;
-			    default:
-			        todayDate = (Number(todayDate[0])*1000000) +(12*10000)+ Number(todayDate[2])
-			}
-		    m.api.one("schedule",todayDate).get().then(function(response){
+		    m.api.one("schedule",new Date(that.todayDate()).getTime() / 1000).get().then(function(response){
 		    	that.schedules = m.prop(response.body(false).data)
 		    	Analytics.showSchedule = m.prop(true)
 		    	m.redraw(true)
@@ -381,61 +339,12 @@ Analytics.controller = function(){
 
 		//add user agenda
 		that.addAgenda = function(e){
-			var todayDate = that.todayDate().split(" ")
-			switch(todayDate[1]) {
-			    case "January":
-			    	console.log("jan")
-			        todayDate = (Number(todayDate[0])*1000000) +(1*10000)+ Number(todayDate[2])
-			        break;
-				case "February":
-					console.log("feb")
-			        todayDate = (Number(todayDate[0])*1000000) +(2*10000)+ Number(todayDate[2])
-			        break;
-			    case "March":
-			    	console.log("mar")
-			        todayDate = (Number(todayDate[0])*1000000) +(3*10000)+ Number(todayDate[2])
-			        break;
-			    case "April":
-			    	console.log("apr")
-			        todayDate = (Number(todayDate[0])*1000000) +(4*10000)+ Number(todayDate[2])
-			        break;
-			    case "May":
-			    	console.log("may")
-			        todayDate = (Number(todayDate[0])*1000000) +(5*10000)+ Number(todayDate[2])
-			        break;
-			    case "June":
-			    	console.log("june")
-			        todayDate = (Number(todayDate[0])*1000000) +(6*10000)+ Number(todayDate[2])
-			        break;
-			    case "July":
-			    	console.log("July")
-			        todayDate = (Number(todayDate[0])*1000000) +(7*10000)+ Number(todayDate[2])
-			        break;
-			    case "August":
-			    	console.log("aug")
-			        todayDate = (Number(todayDate[0])*1000000) +(8*10000)+ Number(todayDate[2])
-			        break;
-			    case "September":
-			    	console.log("sept")
-			        todayDate = (Number(todayDate[0])*1000000) +(9*10000)+ Number(todayDate[2])
-			        break;
-			    case "October":
-			    	console.log("oct")
-			        todayDate = (Number(todayDate[0])*1000000) +(10*10000)+ Number(todayDate[2])
-			        break;
-			    case "November":
-			    	console.log("nov")
-			        todayDate = (Number(todayDate[0])*1000000) +(11*10000)+ Number(todayDate[2])
-			        break;
-			    default:
-			    	console.log("dec")
-			        todayDate = (Number(todayDate[0])*1000000) +(12*10000)+ Number(todayDate[2])
-			}
+
 			console.log(that.startTime(),that.endTime(),that.description(),todayDate)
 			m.schedule.post({
                 startTime: Number(that.startTime()),
                 endTime: Number(that.endTime()),
-                date: todayDate,
+                date: new Date(that.todayDate()).getTime() / 1000,
                 task: that.description(),
             }).then(function(response){
 		        console.log("reponse",response.body(false).data)
