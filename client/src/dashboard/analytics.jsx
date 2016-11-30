@@ -219,6 +219,7 @@ Analytics.controller = function(){
 		that.getAgendas = function(id,today){
 		    var j = id % 10;
 		    var k = id % 100;
+		    that.todayDate = m.prop(id+ " "+today)
 		    if (j == 1 && k != 11) {
 		        that.dateToday = m.prop(id+ "st "+today)
 		    } else if (j == 2 && k != 12) {
@@ -230,6 +231,8 @@ Analytics.controller = function(){
 		    }
 		    m.api.one("schedule",new Date(that.todayDate()).getTime() / 1000).get().then(function(response){
 		    	that.schedules = m.prop(response.body(false).data)
+		    	// console.log(moment(that.schedules()[0].EndTime,"HH:mm"))
+		    	// console.log(moment(moment(that.schedules()[0].EndTime, "hmm").format("HH:mm"), 'h H', 'a A'))
 		    	Analytics.showSchedule = m.prop(true)
 		    	m.redraw(true)
 		    },function(error){
@@ -339,8 +342,6 @@ Analytics.controller = function(){
 
 		//add user agenda
 		that.addAgenda = function(e){
-
-			console.log(that.startTime(),that.endTime(),that.description(),todayDate)
 			m.schedule.post({
                 startTime: Number(that.startTime()),
                 endTime: Number(that.endTime()),
