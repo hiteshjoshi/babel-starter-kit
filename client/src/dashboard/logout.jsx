@@ -13,11 +13,13 @@ Logout.controller = function(){
 	}
 	if(Auth.session_exists())
 	{
-		m.users.delete('session').then((response) => {
-			clearSession()
-		}, (response) =>{
-			clearSession()
-		})
+		m.users.all('session').delete().then(function(response){
+	        console.log("reponse",response.body(false).data)
+	        // m.redraw(true);
+	    }, function(response){
+	        // The reponse code is not >= 200 and < 400
+	        console.log("error",response)
+	    });
 	} else {
 		clearSession()
 	}

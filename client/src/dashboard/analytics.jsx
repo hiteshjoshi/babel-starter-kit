@@ -277,7 +277,7 @@ Analytics.controller = function(){
 		    },function(error){
 		    	console.log("error",error)
 		    })
-			m.redraw(true);
+			// m.redraw(true);
 		}
 
 
@@ -452,16 +452,17 @@ Analytics.controller = function(){
 		that.popForm = function(){
 			$('.ui.modal').modal('show');
 		}
+		that.classes = m.prop(["red row","orange row","yellow row","olive row","green row","teal row","blue row","violet row","purple row","pink row","brown row","grey row","black row"])
 
 		that.addBackground = function(e,isInit){
 			if (!isInit){
-				e.style.background = m.seriesColors[Math.floor(Math.random() * (m.seriesColors.length-1)) + 0 ];
+				e.className = that.classes()[Math.floor(Math.random() * (that.classes().length-1)) + 0 ];
 			}
 		}
 
 		
         Analytics.loaded = m.prop(true);
-        m.redraw();
+        // m.redraw();
 
 	});
 
@@ -515,18 +516,22 @@ Analytics.scheduleDetails = function(ctrl){
 					Agenda for {ctrl.dateToday()}
 				</div>
 				<div class = "ui verticle segment" style="padding:0%"> 
-					<table class="ui celled table" style="width:100.35%;">
+					<div class="ui padded grid">
 					{
 						ctrl.schedules().map(function(schedule,i){
 							return(
-								<tr config={ctrl.addBackground}>
-									<td height="100" align="center" style="width:15%;">{schedule.StartTime}<br/><br/><br/>{schedule.EndTime}</td>
-									<td height="100" style="width:85%;">{schedule.Task}</td>
-								</tr>
+								<div config={ctrl.addBackground}>
+									<div class="four wide column">
+										{schedule.StartTime}<br/><br/><br/>{schedule.EndTime}
+									</div>
+									<div class="column" style="verticle-align:center;">
+										{schedule.Task}
+									</div>
+								</div>
 							)
 						})
 					}
-					</table>
+					</div>
 				</div>
 				<div class="ui right aligned yellow inverted verticle segment" style="border-radius:0px 0px 30px 30px;margin:0%;">
 					<button class="ui primary button" style="border-radius:50px 50px 50px 50px;color:black !important;" onclick={ctrl.popForm}>

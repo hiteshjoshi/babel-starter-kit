@@ -10,7 +10,7 @@ import {
 class Router {
 
     constructor(data) {
-        console.log(data)
+        // console.log(data)
     }
 
     add() {
@@ -77,12 +77,12 @@ var routing = function(data, options) {
     this.load = function(element, ctrl, parent) {
 
         var that = this;
-        console.log(that._url, that._state)
+        // console.log(that._url, that._state)
         page(that._url, function(ctx) {
 
 
             for (var i = 0; i < that._id; i++) {
-                console.log(i);
+                // console.log(i);
             }
             if (parent) {
                 //mountParent here
@@ -189,7 +189,7 @@ r.add({
         state: "dashboard" //name of state + url after slash /
     })
     .exec();
-
+Auth.DoLogin();
 
 
 //console.log(r.States);
@@ -217,8 +217,9 @@ var Auth = require('modules/auth');
 
 Bullet.on('auth_done', function() {
     //page();
+    // console.log("auth_done triggered")
     m.redraw();
 })
 
-Auth.DoLogin();
-//page()
+
+// page()

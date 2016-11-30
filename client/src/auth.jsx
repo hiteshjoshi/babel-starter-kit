@@ -20,8 +20,7 @@ Auth.token = m.cookie.get("haip_session");
 Auth.setSession = function(token){
     m.cookie.set("haip_session",token);
     // console.log("cookie",m.cookie.get("haip_session"))
-    this.session_exists=m.prop(true);
-    this.PingServer()
+    // this.PingServer()
 }
 
 Auth.clearSession = function(){
@@ -38,7 +37,8 @@ Auth.PingServer = function(){
     m.ping.get().then(function(response){
         m.user = m.prop(response.body(false).data);
         Auth.session_exists=m.prop(true);
-        m.redraw(true);
+        // console.log("session2",Auth.session_exists())
+        Bullet.trigger('auth_done');
     }, function(response){
         // The reponse code is not >= 200 and < 400
         Auth.clearSession();
@@ -49,16 +49,16 @@ Auth.PingServer = function(){
 Auth.DoLogin = function(){
     
     if(!this.token){
-
+        console.log("no token")
         this.session_exists = m.prop(false);
         //no session exists, nothing to do
-        // Bullet.trigger('auth_done');
+        Bullet.trigger('auth_done');
     } else {
+        console.log("token")
         Auth.PingServer();
-    }
-
-    
+    } 
 }
+
 Auth.IsLoggedIn = function(){
     // console.log("token",this.token)
     return this.token? Auth.PingServer() : null;

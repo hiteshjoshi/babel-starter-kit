@@ -14,10 +14,13 @@ Dashboard.controller = function(){
 		Auth.setSession(token)
 	}
 
-	if(Auth.IsLoggedIn())
-	{
-		page.redirect('/login')
-	}
+	Bullet.on('auth_done', function() {
+		if(!Auth.session_exists())
+		{
+				page.redirect('/login')
+		}
+		// m.redraw(true)	
+	})
 	// if(m.secondElem()===null){
 	// 	m.secondElem = m.prop(require('modules/dashboard/analytics'))
 	// }

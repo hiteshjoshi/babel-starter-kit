@@ -45,11 +45,12 @@ Login.loaded = m.prop(false);
 Login.controller = function(){
 
 	var that = this;
-
-	if(Auth.session_exists())
-	{
-		page.redirect('/dashboard')
-	}
+	Bullet.on('auth_done', function() {
+		if(Auth.session_exists())
+		{
+			page.redirect('/dashboard')
+		}
+	})
 	m.startComputation();
 
 	require.ensure(["js/country_code"], function(require) {
