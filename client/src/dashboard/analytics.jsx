@@ -214,7 +214,6 @@ Analytics.controller = function(){
 		that.endTime = m.prop(0);
 		that.todayDate = m.prop(0);
 		that.description = m.prop("");
-		that.schedules = m.prop([]);
 
 		that.getAgendas = function(id,today){
 		    var j = id % 10;
@@ -230,7 +229,21 @@ Analytics.controller = function(){
 		    	that.dateToday = m.prop(id+ "th "+today)
 		    }
 		    m.api.one("schedule",new Date(that.todayDate()).getTime() / 1000).get().then(function(response){
-		    	that.schedules = m.prop(response.body(false).data)
+		    	that.schedules = m.prop([])
+		    	// that.time = m.prop([9,10,11,12,13,14,15,16,17,18,19])
+		    	for(var i=0;i<response.body(false).data.length;i++){
+		    		var time = []
+		    		for(var j=response.body(false).data[i].StartTime;j<=response.body(false).data[i].EndTime;j++){
+		    			if(j>12)
+		    				time.push(moment((String(j-12)+"00"), "hmm").format("HH:mm a"))
+		    			else
+		    				time.push(moment((String(j)+"00"), "hmm").format("HH:mm a"))
+		    		}
+		    		that.schedules().push({
+		    			time:time,
+		    			task:response.body(false).data[i].Task
+		    		})
+		    	}
 		    	// console.log(moment(that.schedules()[0].EndTime,"HH:mm"))
 		    	// console.log(moment(moment(that.schedules()[0].EndTime, "hmm").format("HH:mm"), 'h H', 'a A'))
 		    	Analytics.showSchedule = m.prop(true)
@@ -244,26 +257,12 @@ Analytics.controller = function(){
 
 		that.verifyAgenda = function(event){
 			if(that.va==1){
-				$.fn.form.settings.rules.checkMinutes = function(value) {
-				  if((value%100)<=59){
-				  	return true;
-				  }
-				  else
-				  	return false;
+				$.fn.form.settings.rules.checkOfficeHours = function(value) {
+				  	if((value<9)||(value>19))
+				  		return false
+				  	else
+				  		return true;
 				};
-				$.fn.form.settings.rules.checkHours = function(value) {
-				  if((value/100)<=23){
-				  	return true;
-				  }
-				  else
-				  	return false;
-				};
-				// $.fn.form.settings.rules.checkOfficeHours = function(value) {
-				//   	if((value/100<9)||(value/100>19))
-				//   		return false
-				//   	else
-				//   		return true;
-				// };
 				$('#agendaForm').form({
 					fields:{
 						startTime:{
@@ -278,17 +277,9 @@ Analytics.controller = function(){
 			                        prompt: 'startTime should be integer'
 			                    },
 			                    {
-			                        type: 'checkMinutes',
-			                    	prompt: 'minutes hould be less than or equals to 59'
-			                    },
-			                    {
-			                        type: 'checkHours',
-			                    	prompt: 'hours should be less than or equals to 23'
-			                    }//,
-			                    // {
-			                    //     type: 'checkOfficeHours',
-			                    // 	prompt: 'Please select office hours only'
-			                    // }
+			                        type: 'checkOfficeHours',
+			                    	prompt: 'Please select office hours only,i.e., 9-17 hrs'
+			                    }
 			                ]
 						},
 						endTime:{
@@ -303,17 +294,9 @@ Analytics.controller = function(){
 			                        prompt: 'endTime should be integer'
 			                    },
 			                    {
-			                        type: 'checkMinutes',
-			                    	prompt: 'minutes hould be less than or equals to 59 and hours should be less than or equals to 23'
-			                    },
-			                    {
-			                        type: 'checkHours',
-			                    	prompt: 'hours should be less than or equals to 23'
-			                    }//,
-			                    // {
-			                    //     type: 'checkOfficeHours',
-			                    // 	prompt: 'Please select office hours only'
-			                    // }
+			                        type: 'checkOfficeHours',
+			                    	prompt: 'Please select office hours only,i.e., 9-17 hrs'
+			                    }
 		                    ]
 						},
 						description:{
@@ -362,11 +345,12 @@ Analytics.controller = function(){
 		that.popForm = function(){
 			$('.ui.modal').modal('show');
 		}
-		that.classes = m.prop(["red row","orange row","yellow row","olive row","green row","teal row","blue row","violet row","purple row","pink row","brown row","grey row","black row"])
-
+		that.colors = m.prop(["#ced4da","#212529","#ff8787","#c92a2a","#f783ac","#a61e4d","#da77f2","#862e9c","#9775fa","#5f3dc4","#748ffc","#364fc7","#1862ab","#3bc9db","#0b7285","#38d9a9","#087f5b","#69db7c","#2b8a3e","#a9e34b","#5c940d","#ffd43b","#e67700","#ffa94d","#d9480f"])
 		that.addBackground = function(e,isInit){
+			// console.log(document.getElementById(i))
+			// console.log(schedule)
 			if (!isInit){
-				e.className = that.classes()[Math.floor(Math.random() * (that.classes().length-1)) + 0 ];
+				e.style.background = that.colors()[Math.floor(Math.random() * (that.colors().length-1)) + 0 ];
 			}
 		}
 
@@ -394,11 +378,11 @@ Analytics.scheduleForm = function(ctrl){
 		    	  <div class="two fields">
     				<div class="field">
       					<label>Start Time</label>
-					    <input type="text" name="startTime" placeholder="HHMM" oninput={m.withAttr("value",ctrl.startTime)} value={ctrl.startTime()}/>
+					    <input type="text" name="startTime" placeholder="HH" oninput={m.withAttr("value",ctrl.startTime)} value={ctrl.startTime()}/>
 				    </div>
     				<div class="field">
       					<label>End Time</label>
-					    <input type="text" name="endTime" placeholder="HHMM" oninput={m.withAttr("value",ctrl.endTime)} value={ctrl.endTime()}/>
+					    <input type="text" name="endTime" placeholder="HH" oninput={m.withAttr("value",ctrl.endTime)} value={ctrl.endTime()}/>
 				    </div>
 				  </div>
 				  <div class="field">
@@ -426,22 +410,34 @@ Analytics.scheduleDetails = function(ctrl){
 					Agenda for {ctrl.dateToday()}
 				</div>
 				<div class = "ui verticle segment" style="padding:0%"> 
-					<div class="ui padded grid">
+					<table class="ui celled padded table">
 					{
 						ctrl.schedules().map(function(schedule,i){
-							return(
-								<div config={ctrl.addBackground}>
-									<div class="four wide column">
-										{schedule.StartTime}<br/><br/><br/>{schedule.EndTime}
-									</div>
-									<div class="column" style="verticle-align:center;">
-										{schedule.Task}
-									</div>
-								</div>
-							)
+								return(
+									<tr config={ctrl.addBackground}>
+										<td style="width:25%;">
+											{
+												schedule.time.map(function(time,i){
+													if(i==(schedule.time.length-1)){
+														return(
+															<div>{time}</div>
+														)
+													} else{
+														return(
+															<div>{time}<br/><br/></div>
+														)
+													}
+												})
+											}
+										</td>
+										<td style="verticle-align:center;">
+											{schedule.task}
+										</td>
+									</tr>
+								)
 						})
 					}
-					</div>
+					</table>
 				</div>
 				<div class="ui right aligned yellow inverted verticle segment" style="border-radius:0px 0px 30px 30px;margin:0%;">
 					<button class="ui primary button" style="border-radius:50px 50px 50px 50px;color:black !important;" onclick={ctrl.popForm}>
