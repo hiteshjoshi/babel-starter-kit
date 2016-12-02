@@ -58,7 +58,7 @@ Menu.controller = function(){
 
 
 	Bullet.on('auth_done', function() {
-		console.log("triggered in menu")
+		// console.log("triggered in menu")
 		console.log(Auth.session_exists())
 		if(Auth.session_exists()){ //add admin menu
 			ctrl.memberMenu.push({type:"divider"})
@@ -71,7 +71,7 @@ Menu.controller = function(){
 
 		m.redraw(true);
 	})
-	console.log("session",Auth.session_exists())
+	// console.log("session",Auth.session_exists())
 	ctrl.userMenuTitle = Auth.session_exists()?"Dashboard":"Login";
 	ctrl.userMenuHref = Auth.session_exists()?"/dashboard":"/login";
 	ctrl.userMenu = Auth.session_exists()?ctrl.memberMenu:ctrl.nonMemberMenu;

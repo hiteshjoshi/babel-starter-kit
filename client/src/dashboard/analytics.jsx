@@ -230,22 +230,53 @@ Analytics.controller = function(){
 		    }
 		    m.api.one("schedule",new Date(that.todayDate()).getTime() / 1000).get().then(function(response){
 		    	that.schedules = m.prop([])
-		    	// that.time = m.prop([9,10,11,12,13,14,15,16,17,18,19])
+		    	var officehour = 9
 		    	for(var i=0;i<response.body(false).data.length;i++){
 		    		var time = []
+		    		if(officehour<response.body(false).data[i].StartTime){
+			    		for(var k=officehour;k<=response.body(false).data[i].StartTime;k++){
+			    			officehour=k
+			    			// if(k>12)
+			    			// 	time.push(moment((String(k-12)+"00"), "hmm").format("HH:mm a"))
+			    			// else
+			    				time.push(moment((String(officehour)+"00"), "hmm").format("HH:mm a"))
+			    		}
+			    		that.schedules().push({
+			    			time:time,
+			    			task:"Unassigned"
+			    		})	    			
+			    	}
+			    	time = []
 		    		for(var j=response.body(false).data[i].StartTime;j<=response.body(false).data[i].EndTime;j++){
-		    			if(j>12)
-		    				time.push(moment((String(j-12)+"00"), "hmm").format("HH:mm a"))
-		    			else
-		    				time.push(moment((String(j)+"00"), "hmm").format("HH:mm a"))
+		    			officehour=j
+		    			// if(j>12)
+		    			// 	time.push(moment((String(j-12)+"00"), "hmm").format("HH:mm a"))
+		    			// else
+		    				time.push(moment((String(officehour)+"00"), "hmm").format("HH:mm a"))
+		    			console.log("task",officehour)
 		    		}
 		    		that.schedules().push({
 		    			time:time,
 		    			task:response.body(false).data[i].Task
 		    		})
+			    	// }
 		    	}
-		    	// console.log(moment(that.schedules()[0].EndTime,"HH:mm"))
-		    	// console.log(moment(moment(that.schedules()[0].EndTime, "hmm").format("HH:mm"), 'h H', 'a A'))
+		    	if(officehour<19){
+		    		var time = []
+	    			for(var k=officehour;k<=19;k++){
+	    				console.log("Unassigned",officehour)
+	    				officehour = k
+		    			// if(k>12)
+		    			// 	time.push(moment((String(k-12)+"00"), "hmm").format("HH:mm a"))
+		    			// else
+		    				time.push(moment((String(officehour)+"00"), "hmm").format("HH:mm a"))
+		    		}
+		    		that.schedules().push({
+		    			time:time,
+		    			task:"Unassigned"
+		    		})	  
+	    		}
+	    		console.log(that.schedules())
 		    	Analytics.showSchedule = m.prop(true)
 		    	m.redraw(true)
 		    },function(error){
@@ -345,10 +376,8 @@ Analytics.controller = function(){
 		that.popForm = function(){
 			$('.ui.modal').modal('show');
 		}
-		that.colors = m.prop(["#ced4da","#212529","#ff8787","#c92a2a","#f783ac","#a61e4d","#da77f2","#862e9c","#9775fa","#5f3dc4","#748ffc","#364fc7","#1862ab","#3bc9db","#0b7285","#38d9a9","#087f5b","#69db7c","#2b8a3e","#a9e34b","#5c940d","#ffd43b","#e67700","#ffa94d","#d9480f"])
+		that.colors = m.prop(["#adb5bd","#ff6b6b","#f06595","#cc5de8","#845ef7","#5c7cfa","#329af0","#22b8cf","#20c997","#51cf66","#94d82d","#fcc419","#ff922b"])
 		that.addBackground = function(e,isInit){
-			// console.log(document.getElementById(i))
-			// console.log(schedule)
 			if (!isInit){
 				e.style.background = that.colors()[Math.floor(Math.random() * (that.colors().length-1)) + 0 ];
 			}
