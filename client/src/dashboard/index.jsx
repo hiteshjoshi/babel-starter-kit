@@ -21,10 +21,10 @@ Dashboard.controller = function(){
 		}
 		// m.redraw(true)	
 	})
-	m.secondElem===m.prop(null)
-	if(m.secondElem()===null){
-		m.secondElem = m.prop(require('modules/dashboard/analytics'))
-	}
+	// m.secondElem===m.prop(null)
+	// if(m.secondElem()===null){
+	// 	m.secondElem = m.prop(require('modules/dashboard/analytics'))
+	// }
 }
 
 Dashboard.view = function(ctrl){
@@ -51,7 +51,7 @@ Dashboard.view = function(ctrl){
 					  </div>
 					  
 					  <div class="twelve wide column">
-					  	{m.secondElem()}
+					  	{require('modules/dashboard/analytics')}
 					  </div>
 					</div>
 
