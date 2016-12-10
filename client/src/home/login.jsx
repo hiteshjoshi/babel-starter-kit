@@ -257,7 +257,7 @@ Login.form = function(ctrl){
 							</div>
 							<div class="ui segment" config={ctrl.segmentLoading}>
 							<div class="ui center aligned basic segment">
-								<form action="http://localhost:8080/api/v1/users/session">
+								<form action="http://45.55.233.252:8080/api/v1/users/session">
 									<input type="hidden" name="provider" value="twitter" />
 									<button class="ui twitter button">
 										<i class="twitter icon"></i> 
