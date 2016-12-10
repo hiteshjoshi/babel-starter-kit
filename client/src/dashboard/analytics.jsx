@@ -214,6 +214,7 @@ Analytics.controller = function(){
 		that.endTime = m.prop(0);
 		that.todayDate = m.prop(0);
 		that.description = m.prop("");
+		that.schedules = m.prop([])
 
 		that.getAgendas = function(id,today){
 		    var j = id % 10;
@@ -228,9 +229,11 @@ Analytics.controller = function(){
 		    } else{
 		    	that.dateToday = m.prop(id+ "th "+today)
 		    }
-		    m.api.one("schedule",new Date(that.todayDate()).getTime() / 1000).get().then(function(response){
-		    	that.schedules = m.prop([])
+		    var currentDate = new Date(that.todayDate())
+		    var date = String((currentDate.getDate()*1000000)+((currentDate.getMonth()+1)*10000)+(currentDate.getFullYear()))
+		    m.api.one("schedule/date",date).get().then(function(response){
 		    	var officehour = 9
+		    	that.schedules=m.prop([])
 		    	for(var i=0;i<response.body(false).data.length;i++){
 		    		var time = []
 		    		var t;
@@ -348,10 +351,12 @@ Analytics.controller = function(){
 
 		//add user agenda
 		that.addAgenda = function(e){
+			 var currentDate = new Date(that.todayDate())
+		    var date = String((currentDate.getDate()*1000000)+((currentDate.getMonth()+1)*10000)+(currentDate.getFullYear()))
 			m.schedule.post({
                 startTime: Number(that.startTime()),
                 endTime: Number(that.endTime()),
-                date: new Date(that.todayDate()).getTime() / 1000,
+                date: Number(date),
                 task: that.description(),
             }).then(function(response){
 		        // console.log("reponse",response.body(false).data)

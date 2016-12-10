@@ -185,8 +185,13 @@ r.add({
     }).add({
         ctrl: require('modules/dashboard'),
         parentState: "dashboard", //this will be bound to parent url
-        url: "/dashboard",
+        url: "/:username",
         state: "dashboard" //name of state + url after slash /
+    }).add({
+        ctrl: require('modules/dashboard/settings'),
+        parentState: "dashboard", //this will be bound to parent url
+        url: "/dashboard/settings",
+        state: "dashboard/settings" //name of state + url after slash /
     })
     .exec();
 Auth.DoLogin();

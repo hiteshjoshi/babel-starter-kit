@@ -46,11 +46,20 @@ Login.controller = function(){
 
 	var that = this;
 	Bullet.on('auth_done', function() {
+		if(m.cookie.get('haip_redirect')){
+			var redirect = m.cookie.get('haip_redirect')
+			 m.cookie.remove("haip_redirect");
+			page.redirect(redirect)
+		}
 		if(Auth.session_exists())
 		{
-			page.redirect('/dashboard')
+			page.redirect('/'+m.user().userName)
 		}
 	})
+	if(Auth.session_exists())
+	{
+		page.redirect('/'+m.user().userName)
+	}
 	m.startComputation();
 
 	require.ensure(["js/country_code"], function(require) {
@@ -248,7 +257,7 @@ Login.form = function(ctrl){
 							</div>
 							<div class="ui segment" config={ctrl.segmentLoading}>
 							<div class="ui center aligned basic segment">
-								<form action="http://45.55.233.252:8080/api/v1/users/session">
+								<form action="http://localhost:8080/api/v1/users/session">
 									<input type="hidden" name="provider" value="twitter" />
 									<button class="ui twitter button">
 										<i class="twitter icon"></i> 

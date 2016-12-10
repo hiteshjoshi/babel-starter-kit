@@ -49,12 +49,12 @@ Auth.PingServer = function(){
 Auth.DoLogin = function(){
     
     if(!this.token){
-        console.log("no token")
+        // console.log("no token")
         this.session_exists = m.prop(false);
         //no session exists, nothing to do
         Bullet.trigger('auth_done');
     } else {
-        console.log("token")
+        // console.log("token")
         Auth.PingServer();
     } 
 }

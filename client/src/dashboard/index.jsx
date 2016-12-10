@@ -14,13 +14,17 @@ Dashboard.controller = function(){
 		Auth.setSession(token)
 	}
 
-	Bullet.on('auth_done', function() {
-		if(!Auth.session_exists())
-		{
-				page.redirect('/login')
-		}
-		// m.redraw(true)	
-	})
+	if(!Auth.session_exists())
+	{
+			page.redirect('/login')
+	}
+	that.secondElem=m.prop(null)
+	if(that.secondElem===m.prop(null)){
+		that.secondElem=require('modules/dashboard/analytics')
+	}
+	that.changeTab = function(e){
+		console.log(e)
+	}
 	// m.secondElem===m.prop(null)
 	// if(m.secondElem()===null){
 	// 	m.secondElem = m.prop(require('modules/dashboard/analytics'))
@@ -40,7 +44,7 @@ Dashboard.view = function(ctrl){
 						  <a class="active item">
 						    Dashboard
 						  </a>
-						  <a class="item" href="/network">
+						  <a class="item" id="network" style="cursor:pointer;" onclick={ctrl.changeTab}>
 						    Network
 						  </a>
 						  <a class="item">
@@ -50,7 +54,7 @@ Dashboard.view = function(ctrl){
 
 					  </div>
 					  
-					  <div class="twelve wide column">
+					  <div class="twelve wide column" config={Dashboard.second}>
 					  	{require('modules/dashboard/analytics')}
 					  </div>
 					</div>

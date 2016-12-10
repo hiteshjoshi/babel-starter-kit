@@ -56,22 +56,6 @@ Menu.controller = function(){
 
 	];
 
-
-	Bullet.on('auth_done', function() {
-		// console.log("triggered in menu")
-		console.log(Auth.session_exists())
-		if(Auth.session_exists()){ //add admin menu
-			ctrl.memberMenu.push({type:"divider"})
-			ctrl.memberMenu.push({type:"item",title:"Administrator",href:"/admin"})
-		}
-		ctrl.userMenuTitle = Auth.session_exists()?"Dashboard":"Login";
-		ctrl.userMenuHref = Auth.session_exists()?"/dashboard":"/login";
-		ctrl.userMenu = Auth.session_exists()?ctrl.memberMenu:ctrl.nonMemberMenu;
-		console.log(ctrl.userMenu)
-
-		m.redraw(true);
-	})
-	// console.log("session",Auth.session_exists())
 	ctrl.userMenuTitle = Auth.session_exists()?"Dashboard":"Login";
 	ctrl.userMenuHref = Auth.session_exists()?"/dashboard":"/login";
 	ctrl.userMenu = Auth.session_exists()?ctrl.memberMenu:ctrl.nonMemberMenu;
@@ -80,7 +64,7 @@ Menu.controller = function(){
 		ctrl.memberMenu.push({type:"divider"})
 		ctrl.memberMenu.push({type:"item",title:"Administrator",href:"/admin"})
 	}
-
+	// m.redraw(true)
 	return ctrl;
 }
 
